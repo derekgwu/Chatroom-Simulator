@@ -3,6 +3,8 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import netscape.javascript.JSException;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,9 @@ public class GWackClientFrame extends JFrame{
     private JButton disconnect_btn;
     private JLabel members_online_label;
     private JTextArea members_list;
+    private JScrollPane mmbers_scroll;
+    private JScrollPane msg_scroll;
+    private JScrollPane compose_scroll;
     //message panel variables
     private JLabel msg_label;
     private JTextArea msg_area;
@@ -58,6 +63,13 @@ public class GWackClientFrame extends JFrame{
         disconnect_btn = new JButton("Disconnect");
         disconnect_btn.addActionListener(new Connect());
 
+        //scrolls
+        mmbers_scroll = new JScrollPane();
+        msg_scroll = new JScrollPane();
+        compose_scroll = new JScrollPane();
+    
+    
+
         //add variables to top panel
         top_panel.add(name_label);
         top_panel.add(name_entry);
@@ -72,19 +84,21 @@ public class GWackClientFrame extends JFrame{
         msg_label = new JLabel("Messages");
         msg_area = new JTextArea(10,50);
         msg_area.setEditable(false);
+        msg_scroll.setViewportView(msg_area);
 
         //the composer
         compose_panel = new JPanel(new BorderLayout());
         compose_label = new JLabel("Compose");
         compose_area = new JTextArea(3, 50);
         compose_area.setEditable(true);
+        compose_scroll.setViewportView(compose_area);
         compose_panel.add(compose_label, BorderLayout.NORTH);
-        compose_panel.add(compose_area, BorderLayout.SOUTH);
+        compose_panel.add(compose_scroll, BorderLayout.SOUTH);
         
 
         //add to the message panel
         msg_panel.add(msg_label, BorderLayout.NORTH);
-        msg_panel.add(msg_area, BorderLayout.SOUTH);
+        msg_panel.add(msg_scroll, BorderLayout.SOUTH);
         total_msg_panel.add(msg_panel, BorderLayout.NORTH);
         total_msg_panel.add(compose_panel, BorderLayout.SOUTH);
 
@@ -93,10 +107,11 @@ public class GWackClientFrame extends JFrame{
         members_online_label = new JLabel("Members Online");
         members_list = new JTextArea(15,10);
         members_list.setEditable(false);
+        mmbers_scroll.setViewportView(members_list);
 
         //add to the member panel
         mmb_panel.add(members_online_label, BorderLayout.NORTH);
-        mmb_panel.add(members_list, BorderLayout.SOUTH);
+        mmb_panel.add(mmbers_scroll, BorderLayout.SOUTH);
 
         //add member and messages panel to mid panel
         mid_panel.add(mmb_panel);
@@ -104,12 +119,8 @@ public class GWackClientFrame extends JFrame{
 
         //grid constraints
         send = new JButton("Send");
-        send.setPreferredSize(new Dimension(5,25));
-        send.setAlignmentX(RIGHT_ALIGNMENT);
-        bottom_panel.setLayout(new BoxLayout(bottom_panel, BoxLayout.LINE_AXIS));
-        bottom_panel.setLayout(new BoxLayout(bottom_panel, BoxLayout.X_AXIS));
+        bottom_panel.add(send, BorderLayout.EAST);
 
-        bottom_panel.add(send);
         
 
         //create the frame
