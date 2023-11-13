@@ -241,7 +241,8 @@ public class GWackClientFrame extends JFrame{
         compose_area.setText(compose_area.getText().replace("\n", ""));
         try{
             pw.println("START MSG");
-            pw.println(newMessage());
+            String handle = "[" + name_entry.getText() + "] ";
+            pw.println(handle + " " +newMessage());
             pw.println("END MSG");
             pw.flush();
             compose_area.setText("");
@@ -272,8 +273,7 @@ public class GWackClientFrame extends JFrame{
 
         //should be synchronized so no two people write at the same time
         public synchronized void writeMessage(String msg){
-            String handle = "[" + name_entry.getText() + "] ";
-            msg_area.append(handle + msg + "\n");
+            msg_area.append(msg + "\n");
         }
 
         public boolean isConnected(){
