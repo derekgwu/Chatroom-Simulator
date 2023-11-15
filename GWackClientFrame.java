@@ -361,5 +361,3 @@ public class GWackClientFrame extends JFrame{
     
     
 }
-
-
