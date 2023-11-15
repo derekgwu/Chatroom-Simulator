@@ -116,6 +116,16 @@ public class GWackChannel {
             return this.username;
         }
 
+        public void removeClients(Socket sock){
+            if(socket_queue.contains(sock)){
+                    socket_queue.remove(sock);
+                    member_queue.remove(this);
+                    getClientList();
+            }
+
+            
+        }
+
         public void run(){
             username = "";
             PrintWriter pw = null;
@@ -206,13 +216,9 @@ public class GWackChannel {
                 //close the fields
                 pw.close();
                 br.close();
-                if(socket_queue.contains(sock)){
-                    socket_queue.remove(sock);
-                    member_queue.remove(this);
-                    getClientList();
-                }
-
+                removeClients(sock);
                 sock.close();
+                
             } catch (Exception e){
                 try{
                     br.close();
