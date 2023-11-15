@@ -44,7 +44,7 @@ public class GWackChannel {
         dequeue_all();
     }
 
-    public void addClient(GWackConnectedClient client){
+    public synchronized void addClient(GWackConnectedClient client){
         member_queue.add(client);
     }
 
@@ -61,7 +61,7 @@ public class GWackChannel {
     }
 
     //send the
-    public void getClientList(){
+    public synchronized void getClientList(){
         for(Socket s : socket_queue){
             try{
                 PrintWriter pw = new PrintWriter(s.getOutputStream());
@@ -88,7 +88,7 @@ public class GWackChannel {
             this.sock = sock;
         }
         
-        public void sendMessage(String msg){
+        public synchronized void sendMessage(String msg){
             for(Socket s: socket_queue){
                 try{
                     PrintWriter pw = new PrintWriter(s.getOutputStream());
@@ -102,8 +102,14 @@ public class GWackChannel {
             }
         }
 
-        public boolean isValid(){
-            return false;
+        public synchronized void isValid(){
+            for(Socket s: socket_queue){
+                if(s.isClosed()){
+                    socket_queue.remove(s);
+                    getClientList();
+                }
+            }
+            return;
         }
 
         public String getClientName(){
@@ -191,6 +197,8 @@ public class GWackChannel {
                         msg_to_send = message;
                         continue;
                     }
+
+                    isValid();
 
                     
                 }
